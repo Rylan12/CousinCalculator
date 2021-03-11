@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    concurrent-ruby (1.1.8)
+    i18n (0.9.5)
+      concurrent-ruby (~> 1.0)
+    ordinalize_full (1.6.0)
+      i18n (~> 0.8)
+
+PLATFORMS
+  x86_64-darwin-20
+
+DEPENDENCIES
+  ordinalize_full
+
+BUNDLED WITH
+   2.2.3
