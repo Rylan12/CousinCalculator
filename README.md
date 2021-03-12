@@ -2,6 +2,22 @@
 
 A calculator to convert my family tree numbering scheme to the form "nth cousin m times removed"
 
+## Installation
+
+To setup locally run:
+
+```sh
+git clone https://github.com/Rylan12/CousinCalculator.git
+cd CousinCalculator
+bundle install
+```
+
+Run CousinCalculator:
+
+```sh
+./cousin-calculator.rb IDENTIFIER
+```
+
 ## Contact
 
 [Rylan Polster](mailto:rslpolster@gmail.com)
