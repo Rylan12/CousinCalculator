@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "colorize"
 require "ordinalize_full/integer"
@@ -10,7 +11,7 @@ raise ArgumentError, "Must specify a target" if ARGV[0].nil?
 @verbose = false
 
 def output(*message)
-  puts *message if @verbose
+  puts(*message) if @verbose
 end
 
 def find_common_ancestry_position(base, target)
@@ -30,11 +31,11 @@ end
 base = ME.split "."
 target = ARGV[0].split "."
 
-output <<~EOS
+output <<~OUTPUT
   Calculating relationship:
     Base:   #{base.join(".")}
     Target: #{target.join(".")}
-EOS
+OUTPUT
 
 common_ancestry_index = find_common_ancestry_position base, target
 
@@ -48,31 +49,29 @@ common_ancestry = base[0..common_ancestry_index]
 base.shift common_ancestry.length
 target.shift common_ancestry.length
 
-output <<~EOS
+output <<~OUTPUT
   Common ancestry found: #{common_ancestry.join(".")}
   Differing ancestry:
     Base:   .#{base.join(".")}
     Target: .#{target.join(".")}
-EOS
+OUTPUT
 
 base_grandparent = base.length - 2
 target_grandparent = target.length - 2
 
-output <<~EOS
+output <<~OUTPUT
   Grandparent Numbers:
     Base:   #{base_grandparent}
     Target: #{target_grandparent}
-EOS
+OUTPUT
 
 def child_relationship(generation_gap)
   output "Child generation gap: #{generation_gap}"
 
-  if generation_gap == 1
-    "Child"
-  elsif generation_gap == 2
-    "Grandchild"
-  elsif generation_gap == 3
-    "Great grandchild"
+  case generation_gap
+  when 1 then "Child"
+  when 2 then "Grandchild"
+  when 3 then "Great grandchild"
   else
     num_greats = generation_gap - 2
     "#{num_greats.ordinalize} great grandchild"
@@ -82,12 +81,10 @@ end
 def nibling_relationship(generation_gap)
   output "Nibling generation gap: #{generation_gap}"
 
-  if generation_gap == 1
-    "Nibling"
-  elsif generation_gap == 2
-    "Grand nibling"
-  elsif generation_gap == 3
-    "Great grand nibling"
+  case generation_gap
+  when 1 then "Nibling"
+  when 2 then "Grand nibling"
+  when 3 then "Great grand nibling"
   else
     num_greats = generation_gap - 2
     "#{num_greats.ordinalize} great grand nibling"
@@ -102,27 +99,25 @@ def cousin_relationship(base_grandparent, target_grandparent)
   end
   removal_number = (target_grandparent - base_grandparent).abs
 
-  output <<~EOS
+  output <<~OUTPUT
     Relationship:
       Cousin:  #{cousin_number}
       Removal: #{removal_number}
-  EOS
+  OUTPUT
 
-  removal_phrase = if removal_number.zero?
-    ""
-  else
-    number_of_times = if removal_number == 1
-      "once"
-    elsif removal_number == 2
-      "twice"
-    else
-      "#{removal_number} times"
-    end
+  "#{cousin_number.ordinalize} cousin#{cousin_removal_phrase(removal_number)}"
+end
 
-    ", #{number_of_times} removed"
+def cousin_removal_phrase(removal_number)
+  return "" if removal_number.zero?
+
+  number_of_times = case removal_number
+  when 1 then "once"
+  when 2 then "twice"
+  else "#{removal_number} times"
   end
 
-  "#{cousin_number.ordinalize} cousin#{removal_phrase}"
+  ", #{number_of_times} removed"
 end
 
 relationship = if base_grandparent == -2 && target_grandparent == -2
